@@ -9,6 +9,16 @@
   notify:
     - restart zookeeper
 
+
+- name: Create myid symlink  RH family only
+  become: yes
+  become_user: zookeeper
+  file:
+    src: "{{zookeeper_conf_dir}}/myid"
+    dest: "{{ zookeeper_data_dir }}/myid"
+    state: "link"
+  when: "ansible_os_family == 'RedHat'"
+
 - name: Setup environment
   template: dest="{{zookeeper_conf_dir}}/environment" src=environment.j2
   notify:
